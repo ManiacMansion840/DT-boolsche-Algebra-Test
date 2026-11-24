@@ -98,6 +98,7 @@ footer a{color:var(--accent)}
     <a href="#tabellen">Wahrheitstabellen</a>
     <a href="#gesetze">Gesetze</a>
     <a href="#demorgan">De Morgan</a>
+    <a href="#schaltalgebra">Schaltalgebra</a>
     <a href="#praxis">Praxis</a>
     <a href="#interaktiv">Ausprobieren</a>
     <a href="#quiz">Quiz</a>
@@ -244,8 +245,38 @@ footer a{color:var(--accent)}
   <p>Beispiel in Worten: „Nicht (A und B)“ ist dasselbe wie „nicht A oder nicht B“. In der Programmierung sparst du dir damit oft eine Klammer.</p>
 </section>
 
+<section id="schaltalgebra">
+  <h2>6 · Schaltalgebra nach Lipp/Becker</h2>
+  <p>Nach <em>Grundlagen der Digitaltechnik</em> (Lipp/Becker) ist eine <strong>boolesche Algebra</strong> formal ein Gebilde <span class="formula">BA = [K, ∧, ∨, ¬, 0, 1]</span> – eine Menge K mit zwei zweistelligen Verknüpfungen, einer einstelligen Verknüpfung und zwei Konstanten. Sie genügt den <strong>Huntingtonschen Axiomen</strong>:</p>
+  <div class="table-wrap">
+    <table class="laws">
+      <thead><tr><th>Axiom</th><th>Inhalt</th></tr></thead>
+      <tbody>
+        <tr><td>H1 · Abgeschlossenheit</td><td>Jede Verknüpfung von Elementen aus K liegt wieder in K: <code>a ∧ b ∈ K</code>, <code>a ∨ b ∈ K</code></td></tr>
+        <tr><td>H2 · Kommutativgesetz</td><td><code>a ∧ b = b ∧ a</code>, <code>a ∨ b = b ∨ a</code></td></tr>
+        <tr><td>H3 · Distributivgesetz</td><td>Jeder Operator distribuiert über den anderen: <code>a ∧ (b ∨ c) = (a ∧ b) ∨ (a ∧ c)</code></td></tr>
+        <tr><td>H4 · Neutrale Elemente</td><td>Zu jedem Operator existiert ein neutrales Element: <code>a ∨ 0 = a</code>, <code>a ∧ 1 = a</code></td></tr>
+        <tr><td>H5 · Komplement</td><td>Zu jedem <code>a</code> existiert ein <code>¬a</code> mit <code>a ∧ ¬a = 0</code> und <code>a ∨ ¬a = 1</code></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p><strong>Dualitätsprinzip:</strong> Vertauscht man in einem gültigen Satz die Operatoren ∧ und ∨ sowie die Konstanten 0 und 1, entsteht wieder ein gültiger Satz (der „duale Satz“) – so halbiert sich der Beweisaufwand.</p>
+  <h3>Schaltalgebra: SA = [{0, 1}, &amp;, ∨, ¬, 0, 1]</h3>
+  <p>Für die Digitaltechnik ist die zweielementige Interpretation entscheidend: Binärsignale mit den Pegeln <strong>L (low) = 0</strong> und <strong>H (high) = 1</strong>. Relaiskontakte liefern ein anschauliches Modell: <strong>Reihenschaltung = UND</strong>, <strong>Parallelschaltung = ODER</strong>, <strong>Öffner = NICHT</strong>.</p>
+  <p class="hint">📖 Die Operatorsymbole sind nicht einheitlich: UND auch <code>∧ ·</code>, ODER auch <code>+</code>, NICHT auch <code>¬ ‾ '</code> (Strich über dem Buchstaben).</p>
+  <h3>Schaltfunktionen und Normalformen (Kap. 6)</h3>
+  <div class="cards">
+    <div class="card"><h3>Schaltfunktion</h3><p><span class="formula">y = f(x<sub>n</sub>, …, x<sub>1</sub>)</span> Bei <em>n</em> Variablen gibt es <strong>2<sup>n</sup> Belegungen</strong> (das ist die Wahrheitstabelle) und <strong>2<sup>2<sup>n</sup></sup></strong> mögliche Funktionen – bei n = 3 bereits 256.</p></div>
+    <div class="card"><h3>DNF &amp; KNF</h3><p>Jede Schaltfunktion lässt sich eindeutig als <strong>disjunktive Normalform</strong> (ODER von Mintermen über die Einsstellen) oder <strong>konjunktive Normalform</strong> (UND von Maxtermen über die Nullstellen) schreiben – der Hauptsatz der Schaltalgebra.</p></div>
+    <div class="card"><h3>Basissysteme</h3><p><code>{∧, ∨, ¬}</code> genügt für jede Funktion – aber auch <strong>{NAND} allein</strong> oder <strong>{NOR} allein</strong> sind als Basissystem vollständig.</p></div>
+    <div class="card"><h3>Entwicklungssatz (Shannon)</h3><p>Entwicklung nach einer Variablen: <span class="formula">f = (x ∧ f|<sub>x=1</sub>) ∨ (¬x ∧ f|<sub>x=0</sub>)</span></p></div>
+  </div>
+  <p>Zur <strong>Minimierung</strong> dienen Veitch-/Karnaugh-Diagramme (KV-Diagramm): benachbarte Einsen werden zu Primblöcken zusammengefasst, das Ergebnis ist die disjunktive bzw. konjunktive Minimalform (DMF/KMF). Bewertet wird ein Ausdruck über seine „Länge“ (Zahl der Literale plus Zahl der Terme).</p>
+  <p class="hint">📚 Quelle: Lipp, H. M.; Becker, J.: <em>Grundlagen der Digitaltechnik</em>, 7. verb. Auflage, Oldenbourg Verlag, München 2011 – Kapitel 5.4 „Algebraische Strukturen, Boolesche Algebra“ (S. 93–104) und Kapitel 6 „Schaltalgebra“ (S. 109–156), ISBN 978-3-486-70693-2. Inhalte sinngemäß zusammengefasst.</p>
+</section>
+
 <section id="praxis">
-  <h2>6 · Boolesche Algebra im Alltag</h2>
+  <h2>7 · Boolesche Algebra im Alltag</h2>
   <div class="cards">
     <div class="card"><h3>💡 Treppenhauslicht</h3><p>Das Licht brennt, wenn <strong>genau ein</strong> der beiden Schalter an ist:</p><p class="formula">L = A ⊕ B</p></div>
     <div class="card"><h3>🚨 Alarmanlage</h3><p>Der Alarm ist scharf, wenn Tür <strong>und</strong> Fenster verriegelt sind:</p><p class="formula">Alarm = Tür ∧ Fenster</p></div>
@@ -264,7 +295,7 @@ licht = schalter_a != schalter_b                        # XOR  -> True</pre>
 </section>
 
 <section id="interaktiv">
-  <h2>7 · Probier es selbst aus</h2>
+  <h2>8 · Probier es selbst aus</h2>
   <p>Gib einen booleschen Ausdruck ein – die Wahrheitstabelle wird automatisch erzeugt. Stell danach die Variablen über die Schalter um, um das Ergebnis live zu sehen:</p>
   <div class="examples">
     <span>Beispiele:</span>
@@ -282,7 +313,7 @@ licht = schalter_a != schalter_b                        # XOR  -> True</pre>
 </section>
 
 <section id="quiz">
-  <h2>8 · Mini-Quiz</h2>
+  <h2>9 · Mini-Quiz</h2>
   <p>Teste dein Wissen – klicke eine Antwort an:</p>
   <div id="quiz"></div>
   <p id="quizScore" class="score"></p>
@@ -292,6 +323,7 @@ licht = schalter_a != schalter_b                        # XOR  -> True</pre>
 
 <footer>
   <p>Boolesche Algebra – einfach erklärt · Eine einzelne HTML-Datei, funktioniert komplett offline.</p>
+  <p>Abschnitt 6 nach: Lipp/Becker, <em>Grundlagen der Digitaltechnik</em>, 7. Aufl., Oldenbourg 2011 (Kap. 5.4 &amp; 6).</p>
   <p><a href="#grundlagen">↑ Zurück nach oben</a></p>
 </footer>
 
@@ -400,7 +432,8 @@ var QUIZ=[
   {q:'Was ergibt ¬0?',options:['0','1'],answer:1,expl:'NICHT kehrt den Wert um: ¬0 = 1 und ¬1 = 0.'},
   {q:'Wofür steht XOR (⊕)?',options:['Genau eine Eingabe ist 1','Beide Eingaben sind gleich','Mindestens eine Eingabe ist 1'],answer:0,expl:'XOR ist 1, wenn die Eingaben verschieden sind: 0⊕1=1, aber 1⊕1=0.'},
   {q:'De Morgan: ¬(A ∧ B) ist gleich …?',options:['¬A ∨ ¬B','¬A ∧ ¬B','A ∨ B'],answer:0,expl:'Die Verneinung kippt UND in ODER (und umgekehrt): ¬(A ∧ B) = ¬A ∨ ¬B.'},
-  {q:'Was ergibt A ∧ 1?',options:['A','0','1','¬A'],answer:0,expl:'1 ist das neutrale Element von UND: A ∧ 1 = A.'}
+  {q:'Was ergibt A ∧ 1?',options:['A','0','1','¬A'],answer:0,expl:'1 ist das neutrale Element von UND: A ∧ 1 = A.'},
+  {q:'Wie viele verschiedene Schaltfunktionen gibt es bei n = 3 Variablen? (Lipp/Becker, Kap. 6.1)',options:['8','64','256','512'],answer:2,expl:'Es gibt 2^(2^n) mögliche Funktionen – bei n = 3 also 2^8 = 256.'}
 ];
 
 function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
