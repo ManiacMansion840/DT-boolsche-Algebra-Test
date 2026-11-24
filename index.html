@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Boolesche Algebra einfach und übersichtlich erklärt: Operatoren, Wahrheitstabellen, Gesetze, De Morgan, Praxisbeispiele, interaktiver Rechner und Quiz.">
+<title>Boolesche Algebra – einfach erklärt</title>
+<style>
+:root{
+  --bg:#f5f6fa; --card:#ffffff; --ink:#1b2233; --muted:#5c6577;
+  --accent:#4f46e5; --accent-soft:#eef0ff; --border:#e4e7f2;
+  --good:#0a9d6c; --bad:#dc2626; --mono:ui-monospace,'Cascadia Code',Consolas,Menlo,monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:system-ui,-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.65}
+code{font-family:var(--mono);background:#eceffb;color:#3730a3;padding:1px 6px;border-radius:6px;font-size:.92em}
+.topnav{position:sticky;top:0;z-index:10;display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;justify-content:space-between;padding:10px 20px;background:rgba(255,255,255,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--border)}
+.brand{font-weight:800;color:var(--accent)}
+.topnav .links{display:flex;flex-wrap:wrap;gap:4px 14px}
+.topnav a{color:var(--muted);text-decoration:none;font-size:.92rem;font-weight:600}
+.topnav a:hover{color:var(--accent)}
+.hero{background:linear-gradient(135deg,#4f46e5 0%,#0ea5e9 100%);color:#fff;padding:72px 20px;text-align:center}
+.hero h1{margin:0 0 12px;font-size:clamp(2rem,5vw,3.2rem)}
+.hero .lead{max-width:660px;margin:0 auto 28px;font-size:1.15rem;opacity:.95}
+.btn{display:inline-block;padding:12px 22px;border-radius:999px;font-weight:700;text-decoration:none;margin:4px}
+.btn.primary{background:#fff;color:#4338ca}
+.btn.ghost{border:2px solid rgba(255,255,255,.7);color:#fff}
+main{max-width:980px;margin:0 auto;padding:0 20px 60px}
+section{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:28px;margin-top:28px;scroll-margin-top:76px;box-shadow:0 1px 2px rgba(20,25,60,.04)}
+h2{margin-top:0;color:var(--accent);font-size:1.5rem}
+h3{margin:0 0 6px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.card{background:#fbfbfe;border:1px solid var(--border);border-radius:14px;padding:18px}
+.value-cards{display:flex;gap:16px;flex-wrap:wrap;margin:16px 0}
+.value-card{flex:1;min-width:140px;text-align:center;border-radius:14px;padding:18px;border:2px solid var(--border);background:#fbfbfe}
+.value-card .big{display:block;font-size:2.4rem;font-weight:800;font-family:var(--mono)}
+.value-card .lbl{font-weight:700;letter-spacing:.08em}
+.value-card.true{border-color:#86efac;background:#f0fdf4}
+.value-card.true .big{color:var(--good)}
+.value-card.false{border-color:#fca5a5;background:#fef2f2}
+.value-card.false .big{color:var(--bad)}
+.op .op-head{display:flex;gap:14px;align-items:center;margin-bottom:8px}
+.gate{width:76px;height:56px;stroke:var(--accent);fill:none;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.badge{display:inline-block;background:var(--accent-soft);color:#4338ca;border-radius:999px;padding:2px 10px;font-weight:700;font-family:var(--mono);font-size:.85rem;margin-left:6px}
+.table-wrap{overflow-x:auto;margin:14px 0}
+table.tt{border-collapse:collapse;width:100%;min-width:300px;font-family:var(--mono)}
+.tt th,.tt td{border:1px solid var(--border);padding:7px 14px;text-align:center}
+.tt thead th{background:var(--accent-soft);color:#3730a3;font-weight:700}
+.tt .res{background:#ecfdf5;color:#047857;font-weight:700}
+.tt.mini{width:auto;margin-top:10px}
+.tt tbody tr.active td{background:#eef0ff;outline:2px solid var(--accent);outline-offset:-2px}
+table.laws{border-collapse:collapse;width:100%}
+.laws th,.laws td{border:1px solid var(--border);padding:9px 12px;text-align:left;vertical-align:top}
+.laws thead th{background:var(--accent-soft);color:#3730a3}
+.laws td:first-child{font-weight:700;white-space:nowrap}
+.formula{font-family:var(--mono);background:#111827;color:#e5e7eb;padding:6px 14px;border-radius:10px;display:inline-block;margin:6px 0;font-size:1rem}
+.formula-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin:14px 0}
+.formula-card{font-family:var(--mono);font-size:1.25rem;background:#111827;color:#a5f3fc;padding:20px;border-radius:14px;text-align:center}
+.formula-card strong{color:#fff}
+pre.code{background:#111827;color:#e5e7eb;padding:18px;border-radius:14px;overflow-x:auto;font-family:var(--mono);font-size:.95rem;line-height:1.55}
+.hint{background:#fffbeb;border:1px solid #fde68a;color:#92400e;padding:10px 14px;border-radius:10px}
+.error{color:var(--bad);font-weight:600;min-height:1.4em;margin:6px 0}
+#expr{width:100%;font-family:var(--mono);font-size:1.1rem;padding:12px 14px;border:2px solid var(--border);border-radius:12px;margin:10px 0 4px}
+#expr:focus{outline:none;border-color:var(--accent)}
+.examples{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:12px}
+.example-chip{font-family:var(--mono);border:1px solid var(--border);background:#f8f9ff;border-radius:999px;padding:5px 12px;cursor:pointer;font-size:.88rem}
+.example-chip:hover{border-color:var(--accent);color:var(--accent)}
+.var-row{display:flex;flex-wrap:wrap;gap:10px;margin:10px 0}
+.var-chip{display:inline-flex;align-items:center;gap:6px;background:var(--accent-soft);border-radius:999px;padding:5px 14px;font-weight:700;font-family:var(--mono);cursor:pointer}
+.live-badge{display:inline-block;font-family:var(--mono);font-weight:800;font-size:1.25rem;padding:10px 22px;border-radius:14px;margin:8px 0}
+.live-badge.on{background:#ecfdf5;color:#047857;border:2px solid #6ee7b7}
+.live-badge.off{background:#fef2f2;color:#b91c1c;border:2px solid #fca5a5}
+.quiz-item{border:1px solid var(--border);border-radius:14px;padding:16px 18px;margin-bottom:14px;background:#fbfbfe}
+.quiz-q{margin:0 0 10px}
+.quiz-opts{display:flex;flex-direction:column;gap:8px}
+.quiz-opt{text-align:left;padding:10px 14px;border:1.5px solid var(--border);border-radius:10px;background:#fff;cursor:pointer;font-size:.98rem;font-family:inherit}
+.quiz-opt:hover:not(:disabled){border-color:var(--accent)}
+.quiz-opt.correct{background:#ecfdf5;border-color:#34d399;color:#065f46;font-weight:700}
+.quiz-opt.wrong{background:#fef2f2;border-color:#f87171;color:#991b1b}
+.quiz-opt:disabled{cursor:default;opacity:.9}
+.quiz-expl{margin:10px 0 0;padding:8px 12px;border-radius:8px;font-size:.93rem}
+.quiz-expl.ok{background:#ecfdf5;color:#065f46}
+.quiz-expl.no{background:#fef2f2;color:#991b1b}
+.score{font-weight:800;color:var(--accent);font-size:1.1rem}
+footer{text-align:center;color:var(--muted);padding:30px 20px 50px;font-size:.92rem}
+footer a{color:var(--accent)}
+@media(max-width:640px){section{padding:20px}.topnav .links{gap:4px 10px}}
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <span class="brand">🧠 Logik einfach</span>
+  <div class="links">
+    <a href="#grundlagen">Grundlagen</a>
+    <a href="#operatoren">Operatoren</a>
+    <a href="#tabellen">Wahrheitstabellen</a>
+    <a href="#gesetze">Gesetze</a>
+    <a href="#demorgan">De Morgan</a>
+    <a href="#praxis">Praxis</a>
+    <a href="#interaktiv">Ausprobieren</a>
+    <a href="#quiz">Quiz</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <h1>Boolesche Algebra</h1>
+  <p class="lead">Einfach und übersichtlich erklärt: die Mathematik der zwei Zustände – <strong>wahr (1)</strong> und <strong>falsch (0)</strong>. Grundlage jedes Computers und jeder Programmierung.</p>
+  <div class="hero-cta">
+    <a class="btn primary" href="#grundlagen">Grundlagen ansehen</a>
+    <a class="btn ghost" href="#interaktiv">Direkt ausprobieren</a>
+  </div>
+</header>
+
+<main>
+
+<section id="grundlagen">
+  <h2>1 · Was ist boolesche Algebra?</h2>
+  <p>Die <strong>boolesche Algebra</strong> (benannt nach George Boole) rechnet mit nur <strong>zwei Werten</strong>:</p>
+  <div class="value-cards">
+    <div class="value-card true"><span class="big">1</span><span class="lbl">WAHR</span></div>
+    <div class="value-card false"><span class="big">0</span><span class="lbl">FALSCH</span></div>
+  </div>
+  <p>Alles, was nur zwei Zustände haben kann, lässt sich damit beschreiben:</p>
+  <ul>
+    <li>💡 Lichtschalter: <em>an / aus</em></li>
+    <li>⚡ Strom: <em>fließt / fließt nicht</em></li>
+    <li>🚪 Tür: <em>offen / geschlossen</em></li>
+    <li>✅ Aussage: <em>wahr / falsch</em></li>
+  </ul>
+  <p>In der Elektronik und Informatik sind das die Zustände <code>1</code> und <code>0</code> – sie sind die Grundlage jedes Computers. Mit ein paar einfachen Operatoren lassen sich daraus beliebige logische Aussagen aufbauen.</p>
+</section>
+
+<section id="operatoren">
+  <h2>2 · Die vier Grundoperationen</h2>
+  <p>Aus den zwei Werten lassen sich vier wichtige Verknüpfungen bauen:</p>
+  <div class="cards">
+    <div class="card op">
+      <div class="op-head">
+        <svg viewBox="0 0 64 48" class="gate" aria-hidden="true">
+          <line x1="4" y1="24" x2="18" y2="24"/><path d="M18 10 L18 38 L44 24 Z"/><circle cx="48" cy="24" r="4"/><line x1="52" y1="24" x2="60" y2="24"/>
+        </svg>
+        <div><h3>NICHT (NOT)</h3><span class="badge">¬A</span><span class="badge">!A</span></div>
+      </div>
+      <p>Kehrt den Wert um: aus wahr wird falsch und umgekehrt.</p>
+      <table class="tt mini"><thead><tr><th>A</th><th>¬A</th></tr></thead><tbody>
+        <tr><td>0</td><td class="res">1</td></tr><tr><td>1</td><td class="res">0</td></tr>
+      </tbody></table>
+    </div>
+    <div class="card op">
+      <div class="op-head">
+        <svg viewBox="0 0 64 48" class="gate" aria-hidden="true">
+          <line x1="4" y1="16" x2="20" y2="16"/><line x1="4" y1="32" x2="20" y2="32"/><path d="M20 8 H32 A16 16 0 0 1 32 40 H20 Z"/><line x1="48" y1="24" x2="60" y2="24"/>
+        </svg>
+        <div><h3>UND (AND)</h3><span class="badge">A ∧ B</span><span class="badge">A &amp; B</span></div>
+      </div>
+      <p>Nur wahr, wenn <strong>beide</strong> Eingaben wahr sind.</p>
+      <table class="tt mini"><thead><tr><th>A</th><th>B</th><th>A∧B</th></tr></thead><tbody>
+        <tr><td>0</td><td>0</td><td class="res">0</td></tr><tr><td>0</td><td>1</td><td class="res">0</td></tr>
+        <tr><td>1</td><td>0</td><td class="res">0</td></tr><tr><td>1</td><td>1</td><td class="res">1</td></tr>
+      </tbody></table>
+    </div>
+    <div class="card op">
+      <div class="op-head">
+        <svg viewBox="0 0 64 48" class="gate" aria-hidden="true">
+          <line x1="4" y1="14" x2="22" y2="14"/><line x1="4" y1="34" x2="22" y2="34"/><path d="M14 8 C26 8 34 16 46 24 C34 32 26 40 14 40 C22 32 22 16 14 8 Z"/><line x1="46" y1="24" x2="60" y2="24"/>
+        </svg>
+        <div><h3>ODER (OR)</h3><span class="badge">A ∨ B</span><span class="badge">A | B</span></div>
+      </div>
+      <p>Wahr, sobald <strong>mindestens eine</strong> Eingabe wahr ist.</p>
+      <table class="tt mini"><thead><tr><th>A</th><th>B</th><th>A∨B</th></tr></thead><tbody>
+        <tr><td>0</td><td>0</td><td class="res">0</td></tr><tr><td>0</td><td>1</td><td class="res">1</td></tr>
+        <tr><td>1</td><td>0</td><td class="res">1</td></tr><tr><td>1</td><td>1</td><td class="res">1</td></tr>
+      </tbody></table>
+    </div>
+    <div class="card op">
+      <div class="op-head">
+        <svg viewBox="0 0 64 48" class="gate" aria-hidden="true">
+          <path d="M8 8 C16 16 16 32 8 40"/><line x1="6" y1="14" x2="24" y2="14"/><line x1="6" y1="34" x2="24" y2="34"/><path d="M16 8 C28 8 36 16 48 24 C36 32 28 40 16 40 C24 32 24 16 16 8 Z"/><line x1="48" y1="24" x2="60" y2="24"/>
+        </svg>
+        <div><h3>XOR (entweder-oder)</h3><span class="badge">A ⊕ B</span><span class="badge">A ^ B</span></div>
+      </div>
+      <p>Wahr, wenn <strong>genau eine</strong> Eingabe wahr ist.</p>
+      <table class="tt mini"><thead><tr><th>A</th><th>B</th><th>A⊕B</th></tr></thead><tbody>
+        <tr><td>0</td><td>0</td><td class="res">0</td></tr><tr><td>0</td><td>1</td><td class="res">1</td></tr>
+        <tr><td>1</td><td>0</td><td class="res">1</td></tr><tr><td>1</td><td>1</td><td class="res">0</td></tr>
+      </tbody></table>
+    </div>
+  </div>
+</section>
+
+<section id="tabellen">
+  <h2>3 · Wahrheitstabellen</h2>
+  <p>Eine <strong>Wahrheitstabelle</strong> listet alle möglichen Kombinationen der Eingaben auf und zeigt das Ergebnis. Bei <em>n</em> Variablen gibt es <strong>2<sup>n</sup> Zeilen</strong>.</p>
+  <p>Beispiel: <span class="formula">F = (A ∧ B) ∨ ¬C</span></p>
+  <p>Schritt für Schritt: erst <code>¬C</code> bilden, dann <code>A ∧ B</code>, zum Schluss beides mit ODER verknüpfen:</p>
+  <div class="table-wrap">
+    <table class="tt">
+      <thead><tr><th>A</th><th>B</th><th>C</th><th>¬C</th><th>A ∧ B</th><th class="res">F</th></tr></thead>
+      <tbody>
+        <tr><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td class="res">1</td></tr>
+        <tr><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td class="res">0</td></tr>
+        <tr><td>0</td><td>1</td><td>0</td><td>1</td><td>0</td><td class="res">1</td></tr>
+        <tr><td>0</td><td>1</td><td>1</td><td>0</td><td>0</td><td class="res">0</td></tr>
+        <tr><td>1</td><td>0</td><td>0</td><td>1</td><td>0</td><td class="res">1</td></tr>
+        <tr><td>1</td><td>0</td><td>1</td><td>0</td><td>0</td><td class="res">0</td></tr>
+        <tr><td>1</td><td>1</td><td>0</td><td>1</td><td>1</td><td class="res">1</td></tr>
+        <tr><td>1</td><td>1</td><td>1</td><td>0</td><td>1</td><td class="res">1</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="hint">💡 Tipp: Lies die Tabelle Zeile für Zeile – jede Zeile ist ein möglicher Zustand, und die grün markierte Spalte ist das Endergebnis.</p>
+</section>
+
+<section id="gesetze">
+  <h2>4 · Die wichtigsten Gesetze</h2>
+  <p>Damit lassen sich Ausdrücke vereinfachen und umformen – ähnlich wie Klammern in der normalen Mathematik:</p>
+  <div class="table-wrap">
+    <table class="laws">
+      <thead><tr><th>Gesetz</th><th>Regel</th><th>Bedeutung / Beispiel</th></tr></thead>
+      <tbody>
+        <tr><td>Kommutativ</td><td><code>A ∧ B = B ∧ A</code>, <code>A ∨ B = B ∨ A</code></td><td>Die Reihenfolge ist egal: <code>1 ∧ 0 = 0 ∧ 1 = 0</code></td></tr>
+        <tr><td>Assoziativ</td><td><code>(A ∧ B) ∧ C = A ∧ (B ∧ C)</code></td><td>Klammern dürfen verschoben werden (bei gleichem Operator)</td></tr>
+        <tr><td>Distributiv</td><td><code>A ∧ (B ∨ C) = (A ∧ B) ∨ (A ∧ C)</code></td><td>„Ausmultiplizieren“ wie in der normalen Algebra</td></tr>
+        <tr><td>Idempotenz</td><td><code>A ∧ A = A</code>, <code>A ∨ A = A</code></td><td><code>1 ∨ 1 = 1</code> – doppelt hält nicht besser</td></tr>
+        <tr><td>Neutrale Elemente</td><td><code>A ∧ 1 = A</code>, <code>A ∨ 0 = A</code></td><td><code>1</code> ist neutral bei UND, <code>0</code> bei ODER</td></tr>
+        <tr><td>Komplementär</td><td><code>A ∧ ¬A = 0</code>, <code>A ∨ ¬A = 1</code></td><td>Ergibt immer 0 bzw. immer 1</td></tr>
+        <tr><td>Absorption</td><td><code>A ∨ (A ∧ B) = A</code>, <code>A ∧ (A ∨ B) = A</code></td><td>Der „stärkere“ Teil bestimmt das Ergebnis</td></tr>
+        <tr><td>Doppelte Verneinung</td><td><code>¬¬A = A</code></td><td>Zwei NICHT heben sich gegenseitig auf</td></tr>
+        <tr><td>De Morgan</td><td><code>¬(A ∧ B) = ¬A ∨ ¬B</code></td><td>Details im nächsten Abschnitt</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section id="demorgan">
+  <h2>5 · Die De-Morgan-Gesetze</h2>
+  <p>Zwei besonders nützliche Regeln. Merksatz: <strong>„Verneinen heißt: UND und ODER vertauschen und jede Variable einzeln verneinen.“</strong></p>
+  <div class="formula-cards">
+    <div class="formula-card">¬(A ∧ B) = <strong>¬A ∨ ¬B</strong></div>
+    <div class="formula-card">¬(A ∨ B) = <strong>¬A ∧ ¬B</strong></div>
+  </div>
+  <p>Beispiel in Worten: „Nicht (A und B)“ ist dasselbe wie „nicht A oder nicht B“. In der Programmierung sparst du dir damit oft eine Klammer.</p>
+</section>
+
+<section id="praxis">
+  <h2>6 · Boolesche Algebra im Alltag</h2>
+  <div class="cards">
+    <div class="card"><h3>💡 Treppenhauslicht</h3><p>Das Licht brennt, wenn <strong>genau ein</strong> der beiden Schalter an ist:</p><p class="formula">L = A ⊕ B</p></div>
+    <div class="card"><h3>🚨 Alarmanlage</h3><p>Der Alarm ist scharf, wenn Tür <strong>und</strong> Fenster verriegelt sind:</p><p class="formula">Alarm = Tür ∧ Fenster</p></div>
+    <div class="card"><h3>🚗 Motorstart</h3><p>Der Motor startet bei Zündung <strong>oder</strong> Starthilfe:</p><p class="formula">Start = Zündung ∨ Starthilfe</p></div>
+    <div class="card"><h3>🌙 Nachtmodus</h3><p>Aktiv, wenn es <strong>nicht</strong> hell ist:</p><p class="formula">Nacht = ¬Hell</p></div>
+  </div>
+  <h3>… und in der Programmierung</h3>
+  <pre class="code">tuer_verriegelt    = True
+fenster_verriegelt = True
+alarm_scharf = tuer_verriegelt and fenster_verriegelt   # UND  -> True
+
+schalter_a = True
+schalter_b = False
+licht = schalter_a != schalter_b                        # XOR  -> True</pre>
+  <p>In Python heißen die Operatoren <code>and</code>, <code>or</code>, <code>not</code> – in JavaScript/C <code>&amp;&amp;</code>, <code>||</code>, <code>!</code>.</p>
+</section>
+
+<section id="interaktiv">
+  <h2>7 · Probier es selbst aus</h2>
+  <p>Gib einen booleschen Ausdruck ein – die Wahrheitstabelle wird automatisch erzeugt. Stell danach die Variablen über die Schalter um, um das Ergebnis live zu sehen:</p>
+  <div class="examples">
+    <span>Beispiele:</span>
+    <button type="button" class="example-chip" data-expr="(A & B) | !C">(A &amp; B) | !C</button>
+    <button type="button" class="example-chip" data-expr="A ^ B">A ⊕ B (XOR)</button>
+    <button type="button" class="example-chip" data-expr="!(A | B) & C">!(A | B) &amp; C</button>
+    <button type="button" class="example-chip" data-expr="A & !A">A ∧ ¬A</button>
+  </div>
+  <input id="expr" type="text" value="(A & B) | !C" spellcheck="false" autocomplete="off" aria-label="Boolescher Ausdruck">
+  <p id="exprError" class="error" role="alert"></p>
+  <div id="varRow" class="var-row"></div>
+  <div id="liveResult"></div>
+  <p class="hint">Erlaubt: Variablen <code>A–Z</code> (max. 4), <code>! ¬</code> für NICHT, <code>&amp; ∧</code> für UND, <code>| ∨ +</code> für ODER, <code>^ ⊕</code> für XOR und Klammern. Rangfolge: <code>¬</code> vor <code>∧</code> vor <code>⊕</code> vor <code>∨</code>.</p>
+  <div id="ttWrap" class="table-wrap"></div>
+</section>
+
+<section id="quiz">
+  <h2>8 · Mini-Quiz</h2>
+  <p>Teste dein Wissen – klicke eine Antwort an:</p>
+  <div id="quiz"></div>
+  <p id="quizScore" class="score"></p>
+</section>
+
+</main>
+
+<footer>
+  <p>Boolesche Algebra – einfach erklärt · Eine einzelne HTML-Datei, funktioniert komplett offline.</p>
+  <p><a href="#grundlagen">↑ Zurück nach oben</a></p>
+</footer>
+
+<script>
+(function(){
+'use strict';
+
+var OP_SYMBOLS={'!':'NOT','¬':'NOT','~':'NOT','&':'AND','∧':'AND','*':'AND','|':'OR','∨':'OR','+':'OR','^':'XOR','⊕':'XOR'};
+
+function tokenize(str){
+  var tokens=[];
+  for(var i=0;i<str.length;i++){
+    var ch=str[i];
+    if(ch===' '||ch==='\t'||ch==='\n'||ch==='\r') continue;
+    if(ch==='('||ch===')'){tokens.push({t:ch});continue;}
+    if(OP_SYMBOLS[ch]){tokens.push({t:'OP',v:OP_SYMBOLS[ch]});continue;}
+    if((ch>='A'&&ch<='Z')||(ch>='a'&&ch<='z')){tokens.push({t:'VAR',v:ch.toUpperCase()});continue;}
+    throw new Error('Ungültiges Zeichen „'+ch+'“');
+  }
+  return tokens;
+}
+
+function parse(str){
+  var tokens=tokenize(str);
+  var pos=0;
+  function peek(){return tokens[pos];}
+  function next(){return tokens[pos++];}
+  function parseOr(){
+    var left=parseXor();
+    while(peek()&&peek().t==='OP'&&peek().v==='OR'){next();left={op:'OR',a:left,b:parseXor()};}
+    return left;
+  }
+  function parseXor(){
+    var left=parseAnd();
+    while(peek()&&peek().t==='OP'&&peek().v==='XOR'){next();left={op:'XOR',a:left,b:parseAnd()};}
+    return left;
+  }
+  function parseAnd(){
+    var left=parseNot();
+    while(peek()&&peek().t==='OP'&&peek().v==='AND'){next();left={op:'AND',a:left,b:parseNot()};}
+    return left;
+  }
+  function parseNot(){
+    if(peek()&&peek().t==='OP'&&peek().v==='NOT'){next();return {op:'NOT',a:parseNot()};}
+    return parsePrim();
+  }
+  function parsePrim(){
+    var tk=peek();
+    if(!tk) throw new Error('Der Ausdruck endet unerwartet – es fehlt ein Operand');
+    if(tk.t==='('){
+      next();
+      var e=parseOr();
+      if(!peek()||peek().t!==')') throw new Error('Es fehlt eine schließende Klammer „)”');
+      next();
+      return e;
+    }
+    if(tk.t==='VAR'){next();return {op:'VAR',name:tk.v};}
+    throw new Error('Unerwartetes Symbol – Klammer oder Variable erwartet');
+  }
+  if(tokens.length===0) throw new Error('Bitte gib einen Ausdruck ein, z. B. A & B');
+  var ast=parseOr();
+  if(pos<tokens.length) throw new Error('Unerwartetes Symbol am Ende des Ausdrucks');
+  return ast;
+}
+
+function varsOf(ast,set){
+  set=set||new Set();
+  if(ast.op==='VAR'){set.add(ast.name);}
+  else{
+    if(ast.a) varsOf(ast.a,set);
+    if(ast.b) varsOf(ast.b,set);
+  }
+  return set;
+}
+
+function evalAst(ast,env){
+  switch(ast.op){
+    case 'VAR': return env[ast.name]?1:0;
+    case 'NOT': return evalAst(ast.a,env)?0:1;
+    case 'AND': return (evalAst(ast.a,env)&&evalAst(ast.b,env))?1:0;
+    case 'OR':  return (evalAst(ast.a,env)||evalAst(ast.b,env))?1:0;
+    case 'XOR': return (evalAst(ast.a,env)!==evalAst(ast.b,env))?1:0;
+    default: throw new Error('Unbekannter Ausdruck');
+  }
+}
+
+function tableFor(expr){
+  var ast=parse(expr);
+  var vars=Array.from(varsOf(ast)).sort();
+  if(vars.length===0) throw new Error('Der Ausdruck braucht mindestens eine Variable (z. B. A)');
+  if(vars.length>4) throw new Error('Maximal 4 Variablen erlaubt – die Tabelle wäre sonst zu groß');
+  var n=vars.length, rows=[];
+  for(var i=0;i<Math.pow(2,n);i++){
+    var env={};
+    vars.forEach(function(v,j){env[v]=(i>>(n-1-j))&1;});
+    rows.push({env:env,result:evalAst(ast,env)});
+  }
+  return {ast:ast,vars:vars,rows:rows};
+}
+
+globalThis.Bool={tokenize:tokenize,parse:parse,evalAst:evalAst,varsOf:varsOf,tableFor:tableFor};
+
+var QUIZ=[
+  {q:'Was ergibt 1 ∧ 0?',options:['0','1'],answer:0,expl:'UND ist nur dann 1, wenn beide Eingaben 1 sind.'},
+  {q:'Was ergibt 1 ∨ 0?',options:['0','1'],answer:1,expl:'ODER ist 1, sobald mindestens eine Eingabe 1 ist.'},
+  {q:'Was ergibt ¬0?',options:['0','1'],answer:1,expl:'NICHT kehrt den Wert um: ¬0 = 1 und ¬1 = 0.'},
+  {q:'Wofür steht XOR (⊕)?',options:['Genau eine Eingabe ist 1','Beide Eingaben sind gleich','Mindestens eine Eingabe ist 1'],answer:0,expl:'XOR ist 1, wenn die Eingaben verschieden sind: 0⊕1=1, aber 1⊕1=0.'},
+  {q:'De Morgan: ¬(A ∧ B) ist gleich …?',options:['¬A ∨ ¬B','¬A ∧ ¬B','A ∨ B'],answer:0,expl:'Die Verneinung kippt UND in ODER (und umgekehrt): ¬(A ∧ B) = ¬A ∨ ¬B.'},
+  {q:'Was ergibt A ∧ 1?',options:['A','0','1','¬A'],answer:0,expl:'1 ist das neutrale Element von UND: A ∧ 1 = A.'}
+];
+
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+function fmtAst(ast){
+  function wrapA(n){return (n.op==='VAR'||n.op==='NOT')?fmtAst(n):'('+fmtAst(n)+')';}
+  switch(ast.op){
+    case 'VAR': return ast.name;
+    case 'NOT': return '¬'+wrapA(ast.a);
+    case 'AND': return wrapA(ast.a)+' ∧ '+wrapA(ast.b);
+    case 'OR':  return wrapA(ast.a)+' ∨ '+wrapA(ast.b);
+    case 'XOR': return wrapA(ast.a)+' ⊕ '+wrapA(ast.b);
+  }
+  return '?';
+}
+
+function initQuiz(){
+  var host=document.getElementById('quiz');
+  var score=document.getElementById('quizScore');
+  var answered=0, correct=0;
+  QUIZ.forEach(function(item,idx){
+    var card=document.createElement('div');
+    card.className='quiz-item';
+    var q=document.createElement('p');
+    q.className='quiz-q';
+    q.innerHTML='<strong>Frage '+(idx+1)+':</strong> '+esc(item.q);
+    card.appendChild(q);
+    var opts=document.createElement('div');
+    opts.className='quiz-opts';
+    item.options.forEach(function(opt,oi){
+      var b=document.createElement('button');
+      b.type='button';
+      b.className='quiz-opt';
+      b.textContent=opt;
+      b.addEventListener('click',function(){
+        if(card.dataset.done) return;
+        card.dataset.done='1';
+        answered++;
+        var ok=(oi===item.answer);
+        if(ok) correct++;
+        var btns=opts.querySelectorAll('button');
+        btns.forEach(function(btn,bj){
+          btn.disabled=true;
+          if(bj===item.answer) btn.classList.add('correct');
+          else if(bj===oi) btn.classList.add('wrong');
+        });
+        var expl=document.createElement('p');
+        expl.className='quiz-expl '+(ok?'ok':'no');
+        expl.textContent=(ok?'✔ Richtig! ':'✘ Leider falsch. ')+item.expl;
+        card.appendChild(expl);
+        if(answered===QUIZ.length){
+          var msg='Fertig! Du hast '+correct+' von '+QUIZ.length+' Fragen richtig. ';
+          if(correct===QUIZ.length) msg+='Perfekt! 🎉';
+          else if(correct>=QUIZ.length-2) msg+='Sehr gut! 👍';
+          else msg+='Schau dir die Abschnitte oben nochmal an. 🙂';
+          score.textContent=msg;
+        }else{
+          score.textContent='Zwischenstand: '+correct+' von '+answered+' richtig';
+        }
+      });
+      opts.appendChild(b);
+    });
+    card.appendChild(opts);
+    host.appendChild(card);
+  });
+}
+
+function init(){
+  var input=document.getElementById('expr');
+  var varRow=document.getElementById('varRow');
+  var live=document.getElementById('liveResult');
+  var wrap=document.getElementById('ttWrap');
+  var err=document.getElementById('exprError');
+  var current=null;
+
+  function update(){
+    err.textContent='';
+    varRow.innerHTML='';
+    live.innerHTML='';
+    wrap.innerHTML='';
+    var t;
+    try{ t=tableFor(input.value); }
+    catch(e){ err.textContent='⚠ '+e.message; current=null; return; }
+    current=t;
+    t.vars.forEach(function(v){
+      var label=document.createElement('label');
+      label.className='var-chip';
+      var cb=document.createElement('input');
+      cb.type='checkbox';
+      cb.checked=true;
+      cb.dataset.var=v;
+      cb.addEventListener('change',updateLive);
+      label.appendChild(cb);
+      label.appendChild(document.createTextNode(v+' = 1'));
+      varRow.appendChild(label);
+    });
+    renderTable(t);
+    updateLive();
+  }
+
+  function currentEnv(){
+    var env={};
+    if(!current) return env;
+    current.vars.forEach(function(v){env[v]=0;});
+    varRow.querySelectorAll('input[type=checkbox]').forEach(function(cb){
+      env[cb.dataset.var]=cb.checked?1:0;
+    });
+    return env;
+  }
+
+  function updateLive(){
+    if(!current) return;
+    var env=currentEnv();
+    var r=evalAst(current.ast,env);
+    live.innerHTML='<span class="live-badge '+(r?'on':'off')+'">'+(r?'1 · WAHR':'0 · FALSCH')+'</span>';
+    var rows=wrap.querySelectorAll('tr[data-row]');
+    rows.forEach(function(tr){
+      var match=current.vars.every(function(v){return String(env[v])===tr.dataset[v];});
+      tr.classList.toggle('active',match);
+    });
+  }
+
+  function renderTable(t){
+    var table=document.createElement('table');
+    table.className='tt';
+    var head='<tr>'+t.vars.map(function(v){return '<th>'+v+'</th>';}).join('')+'<th class="res">'+esc(fmtAst(t.ast))+'</th></tr>';
+    var body=document.createElement('tbody');
+    t.rows.forEach(function(row){
+      var tr=document.createElement('tr');
+      tr.dataset.row='1';
+      t.vars.forEach(function(v){tr.dataset[v]=row.env[v];});
+      var cells=t.vars.map(function(v){return '<td>'+row.env[v]+'</td>';}).join('');
+      tr.innerHTML=cells+'<td class="res">'+row.result+'</td>';
+      body.appendChild(tr);
+    });
+    table.innerHTML=head;
+    table.appendChild(body);
+    wrap.innerHTML='';
+    wrap.appendChild(table);
+  }
+
+  input.addEventListener('input',update);
+  document.querySelectorAll('.example-chip').forEach(function(ch){
+    ch.addEventListener('click',function(){input.value=ch.dataset.expr;update();});
+  });
+  update();
+  initQuiz();
+}
+
+if(typeof document!=='undefined'){
+  document.addEventListener('DOMContentLoaded',init);
+}
+
+})();
+</script>
+</body>
+</html>
