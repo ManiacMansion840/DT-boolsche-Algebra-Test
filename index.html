@@ -261,6 +261,28 @@ footer a{color:var(--accent)}
     </table>
   </div>
   <p><strong>Dualitätsprinzip:</strong> Vertauscht man in einem gültigen Satz die Operatoren ∧ und ∨ sowie die Konstanten 0 und 1, entsteht wieder ein gültiger Satz (der „duale Satz“) – so halbiert sich der Beweisaufwand.</p>
+  <h3>Andere Algebren – gleiche Struktur, andere Bedeutung (Kap. 5.4)</h3>
+  <p>Nach Lipp/Becker sind <strong>Mengenalgebra</strong>, <strong>Aussagenlogik</strong> und <strong>Schaltalgebra</strong> nur verschiedene <em>Interpretationen</em> derselben abstrakten booleschen Algebra – deshalb gelten in allen dreien dieselben Gesetze (z. B. De Morgan), nur mit anderen Symbolen (vgl. Tabelle 5.5 im Buch):</p>
+  <div class="table-wrap">
+    <table class="laws">
+      <thead><tr><th>abstrakt BA = [K, T, ⊥, ¬, O, I]</th><th>Mengenalgebra MA = [P(M), ∩, ∪, C<sub>M</sub>, ∅, M]</th><th>Aussagenlogik AL = [{w, f}, UND, ODER, NICHT, …]</th><th>Schaltalgebra SA = [{0, 1}, &amp;, ∨, ¬, 0, 1]</th></tr></thead>
+      <tbody>
+        <tr><td>Grundmenge <strong>K</strong></td><td>Potenzmenge P(M) – alle Teilmengen von M</td><td>{wahr, falsch}</td><td>{0, 1} = {L, H}</td></tr>
+        <tr><td>UND-artig <strong>T</strong></td><td>∩ Durchschnitt</td><td>UND (Konjunktion)</td><td>&amp; (UND)</td></tr>
+        <tr><td>ODER-artig <strong>⊥</strong></td><td>∪ Vereinigung</td><td>ODER (Disjunktion)</td><td>∨ (ODER)</td></tr>
+        <tr><td>Komplement <strong>¬</strong></td><td>C<sub>M</sub>(S) Komplementmenge</td><td>NICHT (Negation)</td><td>¬ (NICHT)</td></tr>
+        <tr><td>neutral zu T: <strong>O</strong></td><td>∅ leere Menge</td><td>„stets falsch“</td><td>0</td></tr>
+        <tr><td>neutral zu ⊥: <strong>I</strong></td><td>M Bezugsmenge</td><td>„stets wahr“</td><td>1</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p><strong>Beispiel – De Morgan in allen drei Welten:</strong></p>
+  <div class="formula-cards">
+    <div class="formula-card">Mengen: C<sub>M</sub>(S ∪ T) = C<sub>M</sub>(S) ∩ C<sub>M</sub>(T)</div>
+    <div class="formula-card">Logik: ¬(A ∨ B) = ¬A ∧ ¬B</div>
+    <div class="formula-card">Schaltung: ¬(a ∨ b) = ¬a &amp; ¬b</div>
+  </div>
+  <p>Die <strong>Unterschiede</strong> liegen also nur in der <em>Bedeutung</em> der Elemente: <strong>Mengen</strong> (Mathematik), <strong>Wahrheitswerte</strong> (Logik) oder <strong>Signalpegel L/H</strong> (Digitaltechnik). Allgemein gilt für jede boolesche Algebra <code>|K| = 2<sup>n</sup></code> (Satz 2 im Buch): Die kleinste nichttriviale ist die zweiwertige (BA₂ bzw. MA₂ mit |M| = 1), die nächstkleinere bereits vierwertig. Die Regeln der Schaltalgebra werden im Buch als <strong>R1–R12</strong> durchnummeriert (R12 = De-Morgan-Regeln) – sie entsprechen den Gesetzen in Abschnitt 4.</p>
   <h3>Schaltalgebra: SA = [{0, 1}, &amp;, ∨, ¬, 0, 1]</h3>
   <p>Für die Digitaltechnik ist die zweielementige Interpretation entscheidend: Binärsignale mit den Pegeln <strong>L (low) = 0</strong> und <strong>H (high) = 1</strong>. Relaiskontakte liefern ein anschauliches Modell: <strong>Reihenschaltung = UND</strong>, <strong>Parallelschaltung = ODER</strong>, <strong>Öffner = NICHT</strong>.</p>
   <p class="hint">📖 Die Operatorsymbole sind nicht einheitlich: UND auch <code>∧ ·</code>, ODER auch <code>+</code>, NICHT auch <code>¬ ‾ '</code> (Strich über dem Buchstaben).</p>
@@ -433,7 +455,8 @@ var QUIZ=[
   {q:'Wofür steht XOR (⊕)?',options:['Genau eine Eingabe ist 1','Beide Eingaben sind gleich','Mindestens eine Eingabe ist 1'],answer:0,expl:'XOR ist 1, wenn die Eingaben verschieden sind: 0⊕1=1, aber 1⊕1=0.'},
   {q:'De Morgan: ¬(A ∧ B) ist gleich …?',options:['¬A ∨ ¬B','¬A ∧ ¬B','A ∨ B'],answer:0,expl:'Die Verneinung kippt UND in ODER (und umgekehrt): ¬(A ∧ B) = ¬A ∨ ¬B.'},
   {q:'Was ergibt A ∧ 1?',options:['A','0','1','¬A'],answer:0,expl:'1 ist das neutrale Element von UND: A ∧ 1 = A.'},
-  {q:'Wie viele verschiedene Schaltfunktionen gibt es bei n = 3 Variablen? (Lipp/Becker, Kap. 6.1)',options:['8','64','256','512'],answer:2,expl:'Es gibt 2^(2^n) mögliche Funktionen – bei n = 3 also 2^8 = 256.'}
+  {q:'Wie viele verschiedene Schaltfunktionen gibt es bei n = 3 Variablen? (Lipp/Becker, Kap. 6.1)',options:['8','64','256','512'],answer:2,expl:'Es gibt 2^(2^n) mögliche Funktionen – bei n = 3 also 2^8 = 256.'},
+  {q:'In der Aussagenlogik AL entspricht dem neutralen Element 0 der Schaltalgebra … (Lipp/Becker, Kap. 5.4)',options:['„stets falsch“','„stets wahr“','die leere Menge ∅'],answer:0,expl:'AL = [{wahr, falsch}, UND, ODER, NICHT, stets falsch, stets wahr] – dort ist O = „stets falsch“ (in der Mengenalgebra wäre es ∅).'}
 ];
 
 function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
