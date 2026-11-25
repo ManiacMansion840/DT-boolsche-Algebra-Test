@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="Boolesche Algebra einfach und übersichtlich erklärt: Operatoren, Wahrheitstabellen, Gesetze, De Morgan, Praxisbeispiele, interaktiver Rechner und Quiz.">
 <title>Boolesche Algebra – einfach erklärt</title>
+<script>
+try{var t=localStorage.getItem('theme');if(t){document.documentElement.dataset.theme=t;}else if(window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches){document.documentElement.dataset.theme='dark';}}catch(e){}
+</script>
 <style>
 :root{
   --bg:#f5f6fa; --card:#ffffff; --ink:#1b2233; --muted:#5c6577;
@@ -20,6 +23,7 @@ code{font-family:var(--mono);background:#eceffb;color:#3730a3;padding:1px 6px;bo
 .topnav .links{display:flex;flex-wrap:wrap;gap:4px 14px}
 .topnav a{color:var(--muted);text-decoration:none;font-size:.92rem;font-weight:600}
 .topnav a:hover{color:var(--accent)}
+.theme-btn{border:1px solid var(--border);background:var(--card);color:var(--ink);border-radius:999px;padding:5px 12px;font-size:1rem;cursor:pointer;line-height:1}
 .hero{background:linear-gradient(135deg,#4f46e5 0%,#0ea5e9 100%);color:#fff;padding:72px 20px;text-align:center}
 .hero h1{margin:0 0 12px;font-size:clamp(2rem,5vw,3.2rem)}
 .hero .lead{max-width:660px;margin:0 auto 28px;font-size:1.15rem;opacity:.95}
@@ -86,6 +90,46 @@ pre.code{background:#111827;color:#e5e7eb;padding:18px;border-radius:14px;overfl
 footer{text-align:center;color:var(--muted);padding:30px 20px 50px;font-size:.92rem}
 footer a{color:var(--accent)}
 @media(max-width:640px){section{padding:20px}.topnav .links{gap:4px 10px}}
+html[data-theme="dark"]{
+  --bg:#0f1420; --card:#171e2e; --ink:#e6e9f2; --muted:#9aa3b8;
+  --accent:#818cf8; --accent-soft:#252e52; --border:#2a3348;
+  --good:#34d399; --bad:#f87171;
+  color-scheme:dark;
+}
+html[data-theme="dark"] .topnav{background:rgba(15,20,32,.92);border-bottom-color:var(--border)}
+html[data-theme="dark"] .topnav a{color:var(--muted)}
+html[data-theme="dark"] .topnav a:hover,html[data-theme="dark"] .brand{color:var(--accent)}
+html[data-theme="dark"] .hero{background:linear-gradient(135deg,#312e81 0%,#075985 100%)}
+html[data-theme="dark"] section{background:var(--card);border-color:var(--border);box-shadow:none}
+html[data-theme="dark"] h2,html[data-theme="dark"] .score{color:var(--accent)}
+html[data-theme="dark"] code{background:#252e52;color:#a5b4fc}
+html[data-theme="dark"] .card,html[data-theme="dark"] .quiz-item{background:#1c2438;border-color:var(--border)}
+html[data-theme="dark"] .badge{background:var(--accent-soft);color:#c7d2fe}
+html[data-theme="dark"] .gate{stroke:var(--accent)}
+html[data-theme="dark"] .value-card{background:#1c2438;border-color:var(--border)}
+html[data-theme="dark"] .value-card.true{background:#052e22;border-color:#14532d}
+html[data-theme="dark"] .value-card.true .big{color:#34d399}
+html[data-theme="dark"] .value-card.false{background:#3f1212;border-color:#7f1d1d}
+html[data-theme="dark"] .value-card.false .big{color:#f87171}
+html[data-theme="dark"] .tt th,html[data-theme="dark"] .tt td,html[data-theme="dark"] .laws th,html[data-theme="dark"] .laws td{border-color:var(--border)}
+html[data-theme="dark"] .tt thead th,html[data-theme="dark"] .laws thead th{background:#252e52;color:#a5b4fc}
+html[data-theme="dark"] .tt .res{background:#052e22;color:#34d399}
+html[data-theme="dark"] .tt tbody tr.active td{background:#252e52}
+html[data-theme="dark"] .hint{background:#3a2f0b;border-color:#a16207;color:#fcd34d}
+html[data-theme="dark"] .error{color:#f87171}
+html[data-theme="dark"] #expr{background:#1c2438;color:var(--ink);border-color:var(--border)}
+html[data-theme="dark"] #expr:focus{border-color:var(--accent)}
+html[data-theme="dark"] .example-chip{background:#1c2438;border-color:var(--border);color:var(--ink)}
+html[data-theme="dark"] .var-chip{background:var(--accent-soft);color:#c7d2fe}
+html[data-theme="dark"] .live-badge.on{background:#052e22;color:#34d399;border-color:#14532d}
+html[data-theme="dark"] .live-badge.off{background:#3f1212;color:#f87171;border-color:#7f1d1d}
+html[data-theme="dark"] .quiz-opt{background:#1c2438;border-color:var(--border);color:var(--ink)}
+html[data-theme="dark"] .quiz-opt.correct{background:#052e22;border-color:#16a34a;color:#86efac}
+html[data-theme="dark"] .quiz-opt.wrong{background:#3f1212;border-color:#dc2626;color:#fca5a5}
+html[data-theme="dark"] .quiz-expl.ok{background:#052e22;color:#86efac}
+html[data-theme="dark"] .quiz-expl.no{background:#3f1212;color:#fca5a5}
+html[data-theme="dark"] footer a{color:var(--accent)}
+html[data-theme="dark"] .formula,html[data-theme="dark"] .formula-card,html[data-theme="dark"] pre.code{background:#0b1020}
 </style>
 </head>
 <body>
@@ -103,6 +147,7 @@ footer a{color:var(--accent)}
     <a href="#interaktiv">Ausprobieren</a>
     <a href="#quiz">Quiz</a>
   </div>
+  <button id="themeToggle" class="theme-btn" type="button" aria-label="Darkmode umschalten" title="Darkmode umschalten">🌙</button>
 </nav>
 
 <header class="hero">
@@ -261,6 +306,28 @@ footer a{color:var(--accent)}
     </table>
   </div>
   <p><strong>Dualitätsprinzip:</strong> Vertauscht man in einem gültigen Satz die Operatoren ∧ und ∨ sowie die Konstanten 0 und 1, entsteht wieder ein gültiger Satz (der „duale Satz“) – so halbiert sich der Beweisaufwand.</p>
+  <h3>Andere Algebren – gleiche Struktur, andere Bedeutung (Kap. 5.4)</h3>
+  <p>Nach Lipp/Becker sind <strong>Mengenalgebra</strong>, <strong>Aussagenlogik</strong> und <strong>Schaltalgebra</strong> nur verschiedene <em>Interpretationen</em> derselben abstrakten booleschen Algebra – deshalb gelten in allen dreien dieselben Gesetze (z. B. De Morgan), nur mit anderen Symbolen (vgl. Tabelle 5.5 im Buch):</p>
+  <div class="table-wrap">
+    <table class="laws">
+      <thead><tr><th>abstrakt BA = [K, T, ⊥, ¬, O, I]</th><th>Mengenalgebra MA = [P(M), ∩, ∪, C<sub>M</sub>, ∅, M]</th><th>Aussagenlogik AL = [{w, f}, UND, ODER, NICHT, …]</th><th>Schaltalgebra SA = [{0, 1}, &amp;, ∨, ¬, 0, 1]</th></tr></thead>
+      <tbody>
+        <tr><td>Grundmenge <strong>K</strong></td><td>Potenzmenge P(M) – alle Teilmengen von M</td><td>{wahr, falsch}</td><td>{0, 1} = {L, H}</td></tr>
+        <tr><td>UND-artig <strong>T</strong></td><td>∩ Durchschnitt</td><td>UND (Konjunktion)</td><td>&amp; (UND)</td></tr>
+        <tr><td>ODER-artig <strong>⊥</strong></td><td>∪ Vereinigung</td><td>ODER (Disjunktion)</td><td>∨ (ODER)</td></tr>
+        <tr><td>Komplement <strong>¬</strong></td><td>C<sub>M</sub>(S) Komplementmenge</td><td>NICHT (Negation)</td><td>¬ (NICHT)</td></tr>
+        <tr><td>neutral zu T: <strong>O</strong></td><td>∅ leere Menge</td><td>„stets falsch“</td><td>0</td></tr>
+        <tr><td>neutral zu ⊥: <strong>I</strong></td><td>M Bezugsmenge</td><td>„stets wahr“</td><td>1</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p><strong>Beispiel – De Morgan in allen drei Welten:</strong></p>
+  <div class="formula-cards">
+    <div class="formula-card">Mengen: C<sub>M</sub>(S ∪ T) = C<sub>M</sub>(S) ∩ C<sub>M</sub>(T)</div>
+    <div class="formula-card">Logik: ¬(A ∨ B) = ¬A ∧ ¬B</div>
+    <div class="formula-card">Schaltung: ¬(a ∨ b) = ¬a &amp; ¬b</div>
+  </div>
+  <p>Die <strong>Unterschiede</strong> liegen also nur in der <em>Bedeutung</em> der Elemente: <strong>Mengen</strong> (Mathematik), <strong>Wahrheitswerte</strong> (Logik) oder <strong>Signalpegel L/H</strong> (Digitaltechnik). Allgemein gilt für jede boolesche Algebra <code>|K| = 2<sup>n</sup></code> (Satz 2 im Buch): Die kleinste nichttriviale ist die zweiwertige (BA₂ bzw. MA₂ mit |M| = 1), die nächstkleinere bereits vierwertig. Die Regeln der Schaltalgebra werden im Buch als <strong>R1–R12</strong> durchnummeriert (R12 = De-Morgan-Regeln) – sie entsprechen den Gesetzen in Abschnitt 4.</p>
   <h3>Schaltalgebra: SA = [{0, 1}, &amp;, ∨, ¬, 0, 1]</h3>
   <p>Für die Digitaltechnik ist die zweielementige Interpretation entscheidend: Binärsignale mit den Pegeln <strong>L (low) = 0</strong> und <strong>H (high) = 1</strong>. Relaiskontakte liefern ein anschauliches Modell: <strong>Reihenschaltung = UND</strong>, <strong>Parallelschaltung = ODER</strong>, <strong>Öffner = NICHT</strong>.</p>
   <p class="hint">📖 Die Operatorsymbole sind nicht einheitlich: UND auch <code>∧ ·</code>, ODER auch <code>+</code>, NICHT auch <code>¬ ‾ '</code> (Strich über dem Buchstaben).</p>
@@ -433,7 +500,8 @@ var QUIZ=[
   {q:'Wofür steht XOR (⊕)?',options:['Genau eine Eingabe ist 1','Beide Eingaben sind gleich','Mindestens eine Eingabe ist 1'],answer:0,expl:'XOR ist 1, wenn die Eingaben verschieden sind: 0⊕1=1, aber 1⊕1=0.'},
   {q:'De Morgan: ¬(A ∧ B) ist gleich …?',options:['¬A ∨ ¬B','¬A ∧ ¬B','A ∨ B'],answer:0,expl:'Die Verneinung kippt UND in ODER (und umgekehrt): ¬(A ∧ B) = ¬A ∨ ¬B.'},
   {q:'Was ergibt A ∧ 1?',options:['A','0','1','¬A'],answer:0,expl:'1 ist das neutrale Element von UND: A ∧ 1 = A.'},
-  {q:'Wie viele verschiedene Schaltfunktionen gibt es bei n = 3 Variablen? (Lipp/Becker, Kap. 6.1)',options:['8','64','256','512'],answer:2,expl:'Es gibt 2^(2^n) mögliche Funktionen – bei n = 3 also 2^8 = 256.'}
+  {q:'Wie viele verschiedene Schaltfunktionen gibt es bei n = 3 Variablen? (Lipp/Becker, Kap. 6.1)',options:['8','64','256','512'],answer:2,expl:'Es gibt 2^(2^n) mögliche Funktionen – bei n = 3 also 2^8 = 256.'},
+  {q:'In der Aussagenlogik AL entspricht dem neutralen Element 0 der Schaltalgebra … (Lipp/Becker, Kap. 5.4)',options:['„stets falsch“','„stets wahr“','die leere Menge ∅'],answer:0,expl:'AL = [{wahr, falsch}, UND, ODER, NICHT, stets falsch, stets wahr] – dort ist O = „stets falsch“ (in der Mengenalgebra wäre es ∅).'}
 ];
 
 function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
@@ -501,7 +569,24 @@ function initQuiz(){
   });
 }
 
+function initTheme(){
+  var btn=document.getElementById('themeToggle');
+  if(!btn) return;
+  function isDark(){return document.documentElement.dataset.theme==='dark';}
+  function apply(d){
+    document.documentElement.dataset.theme=d?'dark':'light';
+    btn.textContent=d?'☀️':'🌙';
+    btn.setAttribute('aria-pressed',d?'true':'false');
+  }
+  apply(document.documentElement.dataset.theme==='dark');
+  btn.addEventListener('click',function(){
+    apply(!isDark());
+    try{localStorage.setItem('theme',isDark()?'dark':'light');}catch(e){}
+  });
+}
+
 function init(){
+  initTheme();
   var input=document.getElementById('expr');
   var varRow=document.getElementById('varRow');
   var live=document.getElementById('liveResult');
